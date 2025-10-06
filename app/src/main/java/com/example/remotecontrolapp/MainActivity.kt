@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
 
         // Lấy các TextView từ layout
         val tvDeviceName = findViewById<TextView>(R.id.tvDeviceName)
-        val tvAndroidId = findViewById<TextView>(R.id.tvAndroidId)
         val tvStatus = findViewById<TextView>(R.id.tvStatus)
 
         // Lấy thông tin thiết bị từ DeviceUtils
@@ -25,7 +24,6 @@ class MainActivity : AppCompatActivity() {
 
         // Cập nhật lên UI
         tvDeviceName.text = "Device name: $deviceName"
-        tvAndroidId.text = "Android ID: $androidId"
         tvStatus.text = "Status: Connected"
 
         val btnAccessibility = findViewById<Button>(R.id.btnAccessibility)

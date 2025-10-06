@@ -3,6 +3,8 @@ package com.example.remotecontrolapp.utils
 import android.content.Context
 import android.os.Build
 import android.provider.Settings
+import android.util.DisplayMetrics
+import android.view.WindowManager
 import androidx.core.content.edit
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -29,7 +31,7 @@ object DeviceUtils {
     /** Model */
     fun getModel(): String = Build.MODEL ?: "Unknown"
 
-    /** Android ID (Settings.Secure.ANDROID_ID). Good for fingerprint, but not perfect global ID. */
+    /** Android ID (Settings.Secure.ANDROID_ID) */
     @Suppress("HardwareIds")
     fun getAndroidId(context: Context): String =
         Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
@@ -41,16 +43,12 @@ object DeviceUtils {
         var id = prefs.getString(KEY_APP_INSTANCE_ID, null)
         if (id.isNullOrEmpty()) {
             id = UUID.randomUUID().toString()
-            prefs.edit {
-                putString(KEY_APP_INSTANCE_ID, id)
-            }
+            prefs.edit { putString(KEY_APP_INSTANCE_ID, id) }
         }
         return id
     }
 
-    /**
-     * Deterministic fingerprint: SHA-256(AndroidId | appInstanceId | deviceName)
-     */
+    /** Deterministic fingerprint: SHA-256(AndroidId | appInstanceId | deviceName) */
     fun getDeviceFingerprint(context: Context): String {
         val raw = "${getAndroidId(context)}|${getOrCreateAppInstanceId(context)}|${getDeviceName()}"
         return sha256Hex(raw)
@@ -58,6 +56,27 @@ object DeviceUtils {
 
     /** Alias dễ hiểu hơn — unique ID chung cho app */
     fun getUniqueDeviceId(context: Context): String = getOrCreateAppInstanceId(context)
+
+    /** Lấy độ phân giải thực tế của màn hình (pixels) */
+    fun getScreenResolution(context: Context): Pair<Int, Int> {
+        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val metrics = wm.currentWindowMetrics
+            val bounds = metrics.bounds
+            Pair(bounds.width(), bounds.height())
+        } else {
+            val metrics = DisplayMetrics()
+            @Suppress("DEPRECATION")
+            wm.defaultDisplay.getRealMetrics(metrics)
+            Pair(metrics.widthPixels, metrics.heightPixels)
+        }
+    }
+
+    /** In ra string “1080x2400” cho dễ đọc */
+    fun getScreenResolutionString(context: Context): String {
+        val (w, h) = getScreenResolution(context)
+        return "${w}x${h}"
+    }
 
     // --- helpers ---
     private fun sha256Hex(input: String): String {
