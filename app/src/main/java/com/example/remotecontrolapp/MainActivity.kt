@@ -16,6 +16,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.example.remotecontrolapp.streaming.ScreenCaptureActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -64,12 +65,15 @@ class MainActivity : AppCompatActivity() {
         tvStatus.text = if (WsService.isConnected) "Status: Connected" else "Status: Connecting..."
 
         // Nút mở cài đặt Trợ năng
+//        btnAccessibility.setOnClickListener {
+//            try {
+//                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+//            } catch (e: Exception) {
+//                Toast.makeText(this, "Không mở được cài đặt Trợ năng", Toast.LENGTH_SHORT).show()
+//            }
+//        }
         btnAccessibility.setOnClickListener {
-            try {
-                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-            } catch (e: Exception) {
-                Toast.makeText(this, "Không mở được cài đặt Trợ năng", Toast.LENGTH_SHORT).show()
-            }
+            startActivity(Intent(this, ScreenCaptureActivity::class.java))
         }
     }
 

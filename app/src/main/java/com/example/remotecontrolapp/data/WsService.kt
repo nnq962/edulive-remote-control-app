@@ -21,7 +21,10 @@ class WsService : Service() {
     private val mainHandler = Handler(Looper.getMainLooper())
 
     companion object {
-        var isConnected: Boolean = false
+        @Volatile var isConnected: Boolean = false
+        @Volatile private var wsClientRef: WsClient? = null
+
+        fun getWsClient(): WsClient? = wsClientRef
     }
 
     override fun onCreate() {
@@ -85,7 +88,7 @@ class WsService : Service() {
                 }
             }
         )
-
+        wsClientRef = wsClient
         wsClient.connect()
     }
 
