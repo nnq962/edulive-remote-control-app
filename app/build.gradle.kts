@@ -45,4 +45,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Mấy cái add thêm
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
 }

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Remote Control App Premium</string>
+    <string name="accessibility">Accessibility</string>
+    <string name="device_name">Device name:</string>
+    <string name="status_unknown">Status: Unknown</string>
+    <string name="remote_control_app_premium">Remote Control App Premium</string>
 </resources>
